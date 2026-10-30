@@ -1,0 +1,6 @@
+{
+  "appId": "com.yunsung.bubblegame",
+  "appName": "비눗방울 터뜨리기",
+  "webDir": "www",
+  "android": { "allowMixedContent": false }
+}

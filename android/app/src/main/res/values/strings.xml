@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">비눗방울 터뜨리기</string>
+    <string name="title_activity_main">비눗방울 터뜨리기</string>
+    <string name="package_name">com.yunsung.bubblegame</string>
+    <string name="custom_url_scheme">com.yunsung.bubblegame</string>
+</resources>

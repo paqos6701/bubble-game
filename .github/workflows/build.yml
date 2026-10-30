@@ -1,0 +1,48 @@
+name: APK 빌드
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: 웹 파일 준비
+        run: |
+          npm ci
+          npm run copy-mp
+          npx cap sync android
+
+      - name: APK 만들기
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: APK 이름 정리
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk bubble-game.apk
+
+      - name: 다운로드 페이지(릴리스)에 올리기
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest bubble-game.apk \
+            --title "비눗방울 터뜨리기 (최신)" \
+            --notes "폰에서 bubble-game.apk 를 눌러 받은 뒤 설치하세요. 빌드: ${{ github.sha }}"
